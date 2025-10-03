@@ -1,67 +1,53 @@
-FROM oven/bun AS base
+# Use Node.js base image
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-
 WORKDIR /app
+
+# Copy package.json and lockfile
+COPY package.json package-lock.json* ./
 
 # Install dependencies
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
+RUN npm ci --only=production
 
-# Rebuild the source code only when needed
+# Rebuild source code only when needed
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Disable telemetry during the build
+# Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
-
-#disable SKIP VALIDATION
 ENV SKIP_ENV_VALIDATION 1
 
-RUN bun run build
+# Build Next.js app
+RUN npm run build
 
-# Production image, copy all the files and run next
+# Production image
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-
-# Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
 
-
+# Create non-root user
 RUN adduser --system --uid 1001 nextjs
 
-RUN mkdir log
-RUN chown nextjs:bun log
-
+# Copy necessary files
 COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:bun .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:bun /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:bun /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:bun /app/node_modules ./node_modules
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=builder /app/drizzle ./drizzle
 
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT 3000
-
-# Set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["bun", "server.js"]
+# Start Next.js standalone server
+CMD ["node", "server.js"]
