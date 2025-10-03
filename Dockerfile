@@ -13,8 +13,7 @@ RUN bun install --frozen-lockfile
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY drizzle.config.ts ./
-COPY ./drizzle ./drizzle
+
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
