@@ -1,4 +1,4 @@
-# Use Node.js base image
+# Base image
 FROM node:20-alpine AS base
 
 # Install dependencies (include dev for build)
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Rebuild source code only when needed
+# Build stage
 FROM base AS builder
 WORKDIR /app
 
@@ -31,7 +31,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Create non-root user
 RUN adduser --system --uid 1001 nextjs
 
-# Copy only required files
+# Copy only the necessary build output
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
@@ -45,4 +45,5 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
+# Start Next.js standalone server
 CMD ["node", "server.js"]

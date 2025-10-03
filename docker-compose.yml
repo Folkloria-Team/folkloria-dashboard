@@ -1,5 +1,13 @@
-.env;
-Dockerfile.dockerignore;
-node_modules;
-npm - debug.log;
-README.md.next.git;
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: nextjs-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+    restart: unless-stopped
