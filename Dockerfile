@@ -1,15 +1,12 @@
 # Use Node.js base image
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
+# Install dependencies (include dev for build)
 FROM base AS deps
 WORKDIR /app
 
-# Copy package.json and lockfile
 COPY package.json package-lock.json* ./
-
-# Install dependencies
-RUN npm ci --only=production
+RUN npm ci
 
 # Rebuild source code only when needed
 FROM base AS builder
@@ -18,7 +15,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV SKIP_ENV_VALIDATION 1
 
@@ -35,11 +31,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Create non-root user
 RUN adduser --system --uid 1001 nextjs
 
-# Copy necessary files
+# Copy only required files
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=builder /app/drizzle ./drizzle
 
@@ -49,5 +45,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Start Next.js standalone server
 CMD ["node", "server.js"]
