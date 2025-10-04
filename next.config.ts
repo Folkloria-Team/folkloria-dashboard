@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://localhost:3333/*")],
   },
-  standalone: true,
+  output: "standalone",
 };
 
 export default nextConfig;
