@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
@@ -27,5 +27,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/${{ env.OWNER_LC }}/hono-app:latest
-
+          tags: ghcr.io/${{ env.OWNER_LC }}/dashboard-app:latest
