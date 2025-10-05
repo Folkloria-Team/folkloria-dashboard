@@ -6,6 +6,7 @@ import { Search, Plus, Edit3, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteStory, getAllStories } from "@/services/stories";
+import { env } from "@/lib/env";
 
 type Story = {
   id: string;
@@ -51,11 +52,9 @@ export default function Stories() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-                Indonesian Folk Stories
+                Indonesian Folkloria
               </h1>
-              <p className="text-gray-600 text-lg">
-                Koleksi cerita rakyat nusantara yang penuh makna dan wisdom
-              </p>
+              <p className="text-gray-600 text-lg">Dicoding Bekup 2025</p>
             </div>
 
             <button
@@ -99,7 +98,7 @@ export default function Stories() {
               {/* Cover Image */}
               <div className="relative overflow-hidden">
                 <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${story.cover}`}
+                  src={`${env.apiUrl}${story.cover}`}
                   alt={story.title}
                   className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
                   width={400}

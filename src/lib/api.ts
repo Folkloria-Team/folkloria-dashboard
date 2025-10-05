@@ -1,8 +1,8 @@
 import axios from "axios";
+import { env } from "./env";
 
 const api = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL || "https://bekup-api.radifa.my.id/api",
+  baseURL: env.apiUrl,
   headers: {
     "Content-Type": "application/json",
   },
