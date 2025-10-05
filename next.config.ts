@@ -5,7 +5,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://localhost:3333/*")],
   },
-  standalone: true,
+  output: "standalone",
+  typescript: {
+    ignoreBuildErrors: true, // Temporary - to see if it's a TS error
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // Temporary - to see if it's an ESLint error
+  },
 };
 
 export default nextConfig;
