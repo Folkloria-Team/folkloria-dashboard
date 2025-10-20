@@ -9,6 +9,19 @@ export const storySchema = z.object({
     .any()
     .refine((file) => file?.length === 1, "Harus upload 1 file cover"),
   province_id: z.string().uuid("Province ID harus UUID valid"),
+  island: z.enum(
+    [
+      "Sumatra",
+      "Jawa",
+      "Kalimantan",
+      "Sulawesi",
+      "Papua",
+      "Bali",
+      "Nusa Tenggara",
+      "Maluku",
+    ],
+    "Pulau tidak valid"
+  ),
 });
 
 export const storyUpdateSchema = storySchema.extend({

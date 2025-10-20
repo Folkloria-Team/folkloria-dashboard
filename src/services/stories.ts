@@ -8,6 +8,7 @@ export async function createStory(data: StoryForm) {
   formData.append("sinopsis", data.sinopsis);
   formData.append("content", data.content);
   formData.append("province_id", data.province_id);
+  formData.append("island", data.island);
 
   if (data.cover && data.cover.length > 0) {
     formData.append("cover", data.cover[0]);
@@ -26,6 +27,7 @@ export async function updateStory(data: StoryUpdateForm, id: string) {
   formData.append("sinopsis", data.sinopsis);
   formData.append("content", data.content);
   formData.append("province_id", data.province_id);
+  formData.append("island", data.island);
 
   if (data.cover && data.cover.length > 0) {
     formData.append("cover", data.cover[0]);

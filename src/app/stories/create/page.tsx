@@ -155,7 +155,52 @@ export default function CreateStoryPage() {
               </div>
             )}
           </div>
-
+          <div className="space-y-2">
+            <label
+              htmlFor="province"
+              className="flex items-center gap-2 text-sm font-semibold text-gray-700"
+            >
+              <MapPin className="w-4 h-4 text-emerald-600" />
+              Pulau
+            </label>
+            <div className="relative">
+              <select
+                id="island"
+                {...register("island")}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all duration-200 appearance-none bg-white cursor-pointer"
+              >
+                <option value="">Pilih Pulau</option>
+                <option value="Sumatra">Sumatra</option>
+                <option value="Jawa">Jawa</option>
+                <option value="Kalimantan">Kalimantan</option>
+                <option value="Sulawesi">Sulawesi</option>
+                <option value="Papua">Papua</option>
+                <option value="Bali">Bali</option>
+                <option value="Nusa Tenggara">Nusa Tenggara</option>
+                <option value="Maluku">Maluku</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+            {errors.island && (
+              <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{errors.island.message}</p>
+              </div>
+            )}
+          </div>
           {/* Province */}
           <div className="space-y-2">
             <label
